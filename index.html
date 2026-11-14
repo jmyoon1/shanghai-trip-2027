@@ -13,7 +13,8 @@ html, body { margin: 0; height: 100%; background: #E9E1EF; overflow: hidden; }
 * { box-sizing: border-box; }
 p, h1, h2, h3 { margin: 0; }
 a { color: inherit; }
-#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+#vp { position: fixed; inset: 0; overflow: hidden; }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
 #stage > section { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: none;
   border-radius: 28px; box-shadow: 0 18px 50px rgba(59, 51, 85, 0.18); }
 #stage > section.on { display: flex; }
@@ -87,9 +88,10 @@ h3 { font-size: 40px; line-height: 1.15; }
 .mapcol { display: flex; flex-direction: column; gap: 24px; }
 
 </style>
+<link rel="stylesheet" href="comments.css">
 </head>
 <body>
-<div id="stage">
+<div id="vp"><div id="stage">
 <section id="cover" style="justify-content:center;" data-transition="fade">
 <div kind="ellipse" class="blob" style="position:absolute; left:1180px; top:150px; width:540px; height:540px; background:#FFDCCF"></div>
 <div kind="ellipse" class="blob" style="position:absolute; left:1500px; top:600px; width:290px; height:290px; background:#DFF4EA"></div>
@@ -373,16 +375,19 @@ h3 { font-size: 40px; line-height: 1.15; }
 </div>
 </section>
 
-</div>
-<nav><button id="prev" aria-label="이전 장">&#8249;</button><span id="count"></span><button id="next" aria-label="다음 장">&#8250;</button></nav>
+</div></div>
+<nav><button id="prev" aria-label="이전 장">&#8249;</button><span id="count"></span><button id="next" aria-label="다음 장">&#8250;</button><button id="cbtn" class="cbtn" aria-label="댓글">댓글<span id="cnum"></span></button></nav>
 <script>
 const stage = document.getElementById('stage');
 const S = Array.from(stage.children);
 let cur = 0;
+let K = 1;
 function fit() {
-  const pad = 16, navH = 64;
-  const k = Math.min((innerWidth - pad * 2) / 1920, (innerHeight - pad - navH) / 1080);
-  stage.style.transform = 'translate(' + (-960 * k) + 'px,' + (-540 * k - navH / 2 + pad / 2) + 'px) scale(' + k + ')';
+  const pad = 16, navH = 64, side = window.sideW || 0, bottom = window.bottomH || 0;
+  const w = innerWidth - side, h = innerHeight - bottom;
+  K = Math.min((w - pad * 2) / 1920, (h - pad - navH) / 1080);
+  const x = (w - 1920 * K) / 2, y = (h - navH - 1080 * K) / 2 + pad / 2;
+  stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + K + ')';
 }
 function show(i) {
   cur = Math.max(0, Math.min(S.length - 1, i));
@@ -393,6 +398,7 @@ function show(i) {
   document.getElementById('next').disabled = cur === S.length - 1;
   const h = '#' + S[cur].id;
   if (location.hash !== h) history.replaceState(null, '', h);
+  document.dispatchEvent(new CustomEvent('slidechange', { detail: S[cur] }));
 }
 function fromHash() {
   const i = S.findIndex(s => '#' + s.id === location.hash);
@@ -401,6 +407,7 @@ function fromHash() {
 document.getElementById('prev').onclick = () => show(cur - 1);
 document.getElementById('next').onclick = () => show(cur + 1);
 addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('input, textarea, [contenteditable]')) return;
   if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(cur + 1); }
   if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(cur - 1); }
   if (e.key === 'Home') show(0);
@@ -416,7 +423,10 @@ stage.addEventListener('touchend', e => {
 });
 addEventListener('resize', fit);
 addEventListener('hashchange', fromHash);
+window.deck = { stage, S, show, fit, cur: () => S[cur], k: () => K };
 fit(); fromHash();
 </script>
+<script>window.COMMENTS_URL = "";</script>
+<script src="comments.js"></script>
 </body>
 </html>
