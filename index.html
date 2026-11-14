@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상하이 여행 계획</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+html, body { margin: 0; height: 100%; background: #E9E1EF; overflow: hidden; }
+* { box-sizing: border-box; }
+p, h1, h2, h3 { margin: 0; }
+a { color: inherit; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+#stage > section { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: none;
+  border-radius: 28px; box-shadow: 0 18px 50px rgba(59, 51, 85, 0.18); }
+#stage > section.on { display: flex; }
+div[kind="ellipse"] { border-radius: 50%; }
+div[kind="rounded"] { border-radius: 14px; flex: none; }
+.livewrap { position: relative; }
+iframe.live { display: block; border: 0; background: #DCEBF2; }
+.livewrap::after { content: "끌어서 이동, 휠·두 손가락으로 확대"; position: absolute; right: 28px; top: 24px; font-size: 20px;
+  background: rgba(255, 253, 249, 0.92); color: #6E6585; padding: 4px 16px; border-radius: 20px; pointer-events: none; }
+nav { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;
+  font: 15px 'Gowun Dodum', sans-serif; color: #3B3355; background: rgba(255, 253, 249, 0.9); padding: 6px 10px;
+  border-radius: 999px; box-shadow: 0 4px 14px rgba(59, 51, 85, 0.15); z-index: 10; }
+nav button { border: 0; background: #FFDCCF; color: #3B3355; width: 38px; height: 38px; border-radius: 50%; font-size: 18px; cursor: pointer; }
+nav button:disabled { opacity: 0.35; cursor: default; }
+#count { min-width: 64px; text-align: center; }
+:root {
+  --ink: #3B3355;
+  --body: #5A5070;
+  --cream: #FFF7EE;
+  --lav: #F4EFFB;
+  --coral: #B4503A;
+}
+body { font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; color: #5A5070; }
+section { background: #FFF7EE; padding: 128px; display: flex; flex-direction: column; gap: 40px; color: #5A5070; }
+section.alt { background: #F4EFFB; }
+section.accent { background: #FFDCCF; }
+h1, h2, h3 { font-family: 'Jua', 'Gowun Dodum', sans-serif; font-weight: 400; color: #3B3355; }
+h1 { font-size: 120px; line-height: 1.1; }
+h2 { font-size: 64px; line-height: 1.1; }
+h3 { font-size: 40px; line-height: 1.15; }
+.head { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: 24px; color: #B4503A; background: #FFE6DC; padding: 6px 26px; border-radius: 40px; align-self: flex-start; }
+.alt .eyebrow { background: #FFFFFF; }
+.lead { font-size: 32px; line-height: 1.5; color: #5A5070; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 40px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
+.row4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 32px; }
+.card { background: #FFFDF9; border-radius: 44px; padding: 40px 44px; box-shadow: 0 10px 0 #EFE3D3; display: flex; flex-direction: column; gap: 14px; }
+.peach { background: #FFE6DC; box-shadow: 0 10px 0 #F4C9B9; }
+.mint { background: #DFF4EA; box-shadow: 0 10px 0 #B9E0CE; }
+.butter { background: #FFF2CC; box-shadow: 0 10px 0 #EFD89A; }
+.lilac { background: #EEE6FC; box-shadow: 0 10px 0 #D3C4F1; }
+.txt { font-size: 28px; line-height: 1.5; color: #5A5070; }
+.big { font-family: 'Jua', 'Gowun Dodum', sans-serif; font-size: 64px; line-height: 1.1; color: #3B3355; }
+.tag { font-size: 24px; color: #8A3F2E; background: #FFFBF6; padding: 4px 20px; border-radius: 30px; align-self: flex-start; }
+.when { font-size: 24px; color: #B4503A; }
+.slot { display: flex; flex-direction: column; gap: 2px; }
+.ico { width: 56px; height: 56px; color: #B4503A; }
+.blob { opacity: 0.9; }
+.note { font-size: 24px; color: #6E6585; }
+.check { display: flex; flex-direction: row; align-items: center; gap: 28px; }
+.box { width: 48px; height: 48px; background: #FFFDF9; border: 4px solid #C9B8EE; }
+.zh { font-size: 36px; color: #3B3355; background: #FFFDF9; padding: 20px 32px; border-radius: 32px; align-self: flex-start; }
+.num { width: 64px; height: 64px; }
+.numtxt { font-family: 'Jua', 'Gowun Dodum', sans-serif; font-size: 32px; color: #3B3355; }
+.step { display: flex; flex-direction: row; align-items: center; gap: 24px; }
+.dot { width: 64px; height: 64px; border-radius: 32px; background: #FFDCCF; display: flex; align-items: center; justify-content: center; }
+@keyframes pop { from { opacity: 0; transform: translateY(28px) scale(0.95); } }
+@keyframes fadein { from { opacity: 0; } }
+.pop { animation: pop 560ms ease-out both; animation-delay: calc(var(--i, 0) * 110ms); }
+.blob { animation: fadein 700ms ease-out both; }
+.trow { display: flex; flex-direction: row; align-items: center; gap: 32px; }
+.date { font-family: 'Jua', 'Gowun Dodum', sans-serif; font-size: 28px; color: #3B3355; background: #FFE6DC; padding: 10px 24px; border-radius: 30px; width: 240px; text-align: center; }
+.dayrow { display: flex; flex-direction: row; gap: 48px; align-items: flex-start; }
+.daylist { width: 616px; box-sizing: border-box; gap: 10px; }
+.sline { font-size: 28px; line-height: 1.45; color: #3B3355; }
+.daynote { font-size: 24px; line-height: 1.5; color: #6E6585; }
+.mapimg { width: 1000px; height: 648px; object-fit: cover; border-radius: 44px; box-shadow: 0 10px 0 #EFE3D3; }
+.mapimg.half { height: 312px; }
+.mapimg.ov { width: 860px; }
+.mapcol { display: flex; flex-direction: column; gap: 24px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section id="cover" style="justify-content:center;" data-transition="fade">
+<div kind="ellipse" class="blob" style="position:absolute; left:1180px; top:150px; width:540px; height:540px; background:#FFDCCF"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1500px; top:600px; width:290px; height:290px; background:#DFF4EA"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1100px; top:700px; width:150px; height:150px; background:#FFF2CC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1380px; top:140px; width:96px; height:96px; background:#EEE6FC"></div>
+<div class="head pop" style="--i:0; width:1100px; gap:28px;">
+<p class="eyebrow">2027년 1월 · 5박 6일</p>
+<h1>상하이<br>여행 계획</h1>
+<p class="lead">상하이 3박, 항저우 1박, 다시 상하이 1박. 쑤저우는 돌아오는 길에 들러요.</p>
+</div>
+<p class="note" style="position:absolute; left:128px; bottom:80px; width:1200px;">2026년 11월 14일까지 조사한 내용이에요. 날짜와 운영 정보는 12월에 다시 확인해요.</p>
+</section>
+
+<section id="glance">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFF2CC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#DFF4EA"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">기본 정보</p>
+<h2>여행 한눈에 보기</h2>
+</div>
+<div class="grid2">
+<div class="card peach pop" style="--i:1;"><p class="big">5박 6일</p><p class="txt">2027년 1월 중순에서 말 사이. 춘절(2월 6일)과 겹치지 않아요.</p></div>
+<div class="card mint pop" style="--i:2;"><p class="big">3 + 1 + 1박</p><p class="txt">상하이 3박, 항저우 1박, 마지막에 다시 상하이 1박이에요.</p></div>
+<div class="card butter pop" style="--i:3;"><p class="big">인천에서 푸동</p><p class="txt">김포에서 출발하면 훙차오 공항이고, 고속철역과 붙어 있어요.</p></div>
+<div class="card lilac pop" style="--i:4;"><p class="big">1~8℃</p><p class="txt">1월은 상하이에서 가장 추운 달이에요. 습하고 비가 잦아요.</p></div>
+</div>
+</section>
+
+<section id="route" class="alt">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFE6DC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#FFF2CC"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">동선</p>
+<h2>상하이에서 출발해 상하이로</h2>
+</div>
+<div class="row4">
+<div class="card pop" style="--i:1;"><h3>상하이</h3><p class="tag">1~3일차 · 3박</p><p class="txt">시내를 하루에 한 동네씩 봐요.</p></div>
+<div class="card pop" style="--i:2;"><h3>항저우</h3><p class="tag">4일차 · 1박</p><p class="txt">고속철로 45분~1시간. 큰 짐은 상하이 호텔에 맡겨요.</p></div>
+<div class="card pop" style="--i:3;"><h3>쑤저우</h3><p class="tag">5일차 오후</p><p class="txt">항저우에서 약 1.5시간. 박물관과 정원을 보고 저녁까지.</p></div>
+<div class="card pop" style="--i:4;"><h3>상하이</h3><p class="tag">5일차 밤 · 1박</p><p class="txt">쑤저우에서 30분. 6일차에 자기부상열차로 공항까지 8분.</p></div>
+</div>
+<p class="note pop" style="--i:5;">고속철은 상하이 훙차오역 출발이 많아요. 보안 검색과 여권 확인이 있어서 30분 전에 도착해요.</p>
+</section>
+
+<section id="map" class="accent">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow" style="background:#FFF7EE;">동선 지도</p>
+<h2>인천에서 상하이, 항저우, 쑤저우까지</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline">핀의 숫자는 일차예요. 긴 점선은 비행기와 고속철, 실선은 차도예요.</p>
+<p class="daynote">오른쪽 지도는 바로 움직여 볼 수 있어요. 전체 화면 지도에서 날짜를 고르면 장소마다 가오더 지도로 열기와 길찾기 버튼이 있어요. 휴대폰에서는 가오더 앱으로 이어져요.</p>
+<p class="tag"><a href="map.html">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg ov live" data-src="map.html?embed=1#all" title="전체 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="d1" class="alt">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">1일차 · 상하이</p>
+<h2>근대 상하이 첫인상</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline"><span style="color:#B4503A;">1</span>&#160;&#160;인천공항</p>
+<p class="sline"><span style="color:#B4503A;">2</span>&#160;&#160;푸동 공항</p>
+<p class="sline"><span style="color:#B4503A;">3</span>&#160;&#160;대한민국 임시정부 청사</p>
+<p class="sline"><span style="color:#B4503A;">4</span>&#160;&#160;신천지</p>
+<p class="sline"><span style="color:#B4503A;">5</span>&#160;&#160;안푸루</p>
+<p class="sline"><span style="color:#B4503A;">6</span>&#160;&#160;우캉맨션</p>
+<p class="sline"><span style="color:#B4503A;">7</span>&#160;&#160;와이탄</p>
+<p class="daynote">1일차 그림은 시내만 보여요. 공항에서 오는 길은 지도 페이지에서 볼 수 있어요.</p>
+<p class="tag"><a href="map.html#day-1">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg live" data-src="map.html?embed=1&core=1#day-1" title="1일차 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="d2" class="">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">2일차 · 상하이</p>
+<h2>테크와 미술관</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline"><span style="color:#B4503A;">1</span>&#160;&#160;상하이타워</p>
+<p class="sline"><span style="color:#B4503A;">2</span>&#160;&#160;롱미술관 웨스트번드</p>
+<p class="sline"><span style="color:#B4503A;">3</span>&#160;&#160;서가회 성당</p>
+<p class="sline"><span style="color:#B4503A;">4</span>&#160;&#160;그랜드 오페라하우스</p>
+<p class="daynote">테크 투어 모임 장소는 상품마다 달라요.</p>
+<p class="tag"><a href="map.html#day-2">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg live" data-src="map.html?embed=1#day-2" title="2일차 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="d3" class="alt">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">3일차 · 상하이</p>
+<h2>박물관과 강변</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline"><span style="color:#B4503A;">1</span>&#160;&#160;상하이박물관 동관</p>
+<p class="sline"><span style="color:#B4503A;">2</span>&#160;&#160;사행창고 기념관</p>
+<p class="sline"><span style="color:#B4503A;">3</span>&#160;&#160;상하이타워</p>
+<p class="sline"><span style="color:#B4503A;">4</span>&#160;&#160;루자쭈이</p>
+<p class="daynote">쑤저우허 강변에 쟈 미술관과 갤러리 지구가 있어요.</p>
+<p class="tag"><a href="map.html#day-3">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg live" data-src="map.html?embed=1#day-3" title="3일차 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="d4" class="">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">4일차 · 항저우</p>
+<h2>항저우 · 량주</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline"><span style="color:#B4503A;">1</span>&#160;&#160;상하이 훙차오역</p>
+<p class="sline"><span style="color:#B4503A;">2</span>&#160;&#160;항저우동역</p>
+<p class="sline"><span style="color:#B4503A;">3</span>&#160;&#160;량주 박물관</p>
+<p class="sline"><span style="color:#B4503A;">4</span>&#160;&#160;량주 고성 유적 공원</p>
+<p class="sline"><span style="color:#B4503A;">5</span>&#160;&#160;서호 단교</p>
+<p class="daynote">그림은 항저우 안의 동선이에요. 상하이에서 고속철로 45분~1시간.</p>
+<p class="tag"><a href="map.html#day-4">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg live" data-src="map.html?embed=1#day-4" title="4일차 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="d5" class="alt">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">5일차 · 항저우 · 쑤저우</p>
+<h2>항저우에서 쑤저우로</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline"><span style="color:#B4503A;">1</span>&#160;&#160;원산 디지털 생활 지구</p>
+<p class="sline"><span style="color:#B4503A;">2</span>&#160;&#160;딥시크 본사</p>
+<p class="sline"><span style="color:#B4503A;">3</span>&#160;&#160;항저우동역</p>
+<p class="sline"><span style="color:#B4503A;">4</span>&#160;&#160;쑤저우역</p>
+<p class="sline"><span style="color:#B4503A;">5</span>&#160;&#160;쑤저우 박물관</p>
+<p class="sline"><span style="color:#B4503A;">6</span>&#160;&#160;졸정원</p>
+<p class="sline"><span style="color:#B4503A;">7</span>&#160;&#160;핑장루</p>
+<p class="daynote">가장 빡빡한 날이에요. 덜어 낸다면 원산 로봇 지구를 먼저 빼요.</p>
+<p class="tag"><a href="map.html#day-5">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg live" data-src="map.html?embed=1#day-5" title="5일차 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="d6" class="">
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">6일차 · 상하이</p>
+<h2>자기부상열차로 마무리</h2>
+</div>
+<div class="dayrow">
+<div class="card daylist pop" style="--i:1;">
+<p class="sline"><span style="color:#B4503A;">1</span>&#160;&#160;예원</p>
+<p class="sline"><span style="color:#B4503A;">2</span>&#160;&#160;바이롄 ZX</p>
+<p class="sline"><span style="color:#B4503A;">3</span>&#160;&#160;룽양루역</p>
+<p class="sline"><span style="color:#B4503A;">4</span>&#160;&#160;푸동 공항</p>
+<p class="sline"><span style="color:#B4503A;">5</span>&#160;&#160;인천공항</p>
+<p class="daynote">자기부상열차로 공항까지 약 8분.</p>
+<p class="tag"><a href="map.html#day-6">전체 화면 지도</a></p>
+</div>
+<div class="livewrap pop" style="--i:2;"><iframe class="mapimg live" data-src="map.html?embed=1#day-6" title="6일차 동선 지도" loading="lazy"></iframe></div>
+</div>
+</section>
+
+<section id="timeline">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFF2CC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#DFF4EA"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">출발 전 준비</p>
+<h2>언제 무엇을 할까</h2>
+</div>
+<div style="display:flex; flex-direction:column; gap:24px;">
+<div class="trow pop" style="--i:1;"><p class="date">지금~11월</p><p class="lead" style="flex:1;">항공권 예매. 변경과 환불 조건을 꼭 확인해요.</p></div>
+<div class="trow pop" style="--i:2;"><p class="date">12월</p><p class="lead" style="flex:1;">무비자 입국 연장 확인. 연장이 안 되면 관광비자를 신청해요(1~2주).</p></div>
+<div class="trow pop" style="--i:3;"><p class="date">12월 말</p><p class="lead" style="flex:1;">예원 등불 축제 일정 발표 확인, 투어 상품의 1월 날짜 확인.</p></div>
+<div class="trow pop" style="--i:4;"><p class="date">3~4주 전</p><p class="lead" style="flex:1;">고속철, 공연, 숙소 확정.</p></div>
+<div class="trow pop" style="--i:5;"><p class="date">1~2주 전</p><p class="lead" style="flex:1;">알리페이·위챗페이 가입과 카드 연결, 앱 설치, eSIM 준비.</p></div>
+<div class="trow pop" style="--i:6;"><p class="date">전날</p><p class="lead" style="flex:1;">박물관 예약(상하이박물관, 쑤저우 박물관), 날씨 확인.</p></div>
+</div>
+</section>
+
+<section id="booking" class="alt">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFE6DC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#FFF2CC"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">예약 목록</p>
+<h2>미리 잡아 둘 것</h2>
+</div>
+<div class="row3">
+<div class="card pop" style="--i:1;"><h3>항공권</h3><p class="txt">인천에서 푸동. 무비자 연장 발표 전이라 환불 조건을 봐요.</p></div>
+<div class="card pop" style="--i:2;"><h3>숙소</h3><p class="txt">상하이 3박, 항저우 1박, 다시 상하이 1박.</p></div>
+<div class="card pop" style="--i:3;"><h3>고속철</h3><p class="txt">트립닷컴이나 12306 앱에서 여권으로 예매해요.</p></div>
+<div class="card pop" style="--i:4;"><h3>공연</h3><p class="txt">2일차 저녁 그랜드 오페라하우스. 1월 공연표 확인.</p></div>
+<div class="card pop" style="--i:5;"><h3>박물관</h3><p class="txt">상하이박물관, 쑤저우 박물관은 여권 실명 예약.</p></div>
+<div class="card pop" style="--i:6;"><h3>공항 픽업</h3><p class="txt">첫날 픽업 차량. 필요하면 짐 당일 배송도.</p></div>
+</div>
+</section>
+
+<section id="apps">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFF2CC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#DFF4EA"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">통신 · 결제 · 앱</p>
+<h2>휴대폰 하나로 다니려면</h2>
+</div>
+<div class="grid2">
+<div class="card peach pop" style="--i:1;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg><h3>통신</h3></div><p class="txt">현지 망에서는 카톡, 구글, 인스타그램이 막혀요. 로밍이나 해외 eSIM으로 데이터 회선을 준비해요.</p></div>
+<div class="card mint pop" style="--i:2;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l2 2"/></svg><h3>결제</h3></div><p class="txt">알리페이와 위챗페이에 한국 카드를 연결해요. 비상용 현금도 조금.</p></div>
+<div class="card butter pop" style="--i:3;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l7 2.5 2.5 7L21 3z"/><path d="M10 13l4-4"/></svg><h3>이동</h3></div><p class="txt">택시는 디디, 지도는 가오더나 애플 지도. 목적지는 중국어 주소로 넣어요.</p></div>
+<div class="card lilac pop" style="--i:4;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><h3>찾아보기</h3></div><p class="txt">장소와 사진 구도는 샤오훙수, 식당 평점과 영업시간은 다중뎬핑.</p></div>
+</div>
+</section>
+
+<section id="weather" class="alt">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFE6DC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#FFF2CC"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">1월의 상하이</p>
+<h2>날씨와 시기</h2>
+</div>
+<div class="row3">
+<div class="card pop" style="--i:1;"><h3>추위와 비</h3><p class="txt">1~8℃에 습해서 더 춥게 느껴져요. 실내 난방이 약한 곳이 많아요.</p><p class="tag">패딩 · 장갑 · 핫팩 · 우산</p></div>
+<div class="card pop" style="--i:2;"><h3>춘운</h3><p class="txt">설 전후 귀성 이동이 1월 22일쯤 시작해요(추정). 고속철 표가 빨리 팔려요.</p><p class="tag">고속철은 일찍 예매</p></div>
+<div class="card pop" style="--i:3;"><h3>예원 등불 축제</h3><p class="txt">2027년은 1월 중순 개막으로 추정해요. 12월 말 발표를 확인해요.</p><p class="tag">기간이 겹치면 6일차에</p></div>
+</div>
+<p class="note pop" style="--i:4;">해는 17시 15~30분쯤 져요(확인 필요). 야경은 해 진 뒤 20~30분이 가장 예뻐요.</p>
+</section>
+
+<section id="cautions">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFF2CC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#DFF4EA"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">현지에서</p>
+<h2>미리 알아 두면 덜 헤매요</h2>
+</div>
+<div class="grid2">
+<div class="card peach pop" style="--i:1;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><h3>쉬는 요일</h3></div><p class="txt">박물관은 대부분 월요일에 쉬어요. 일정의 월요일 날짜를 먼저 확인해요.</p></div>
+<div class="card mint pop" style="--i:2;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3 .2.9 2.9 2.2 2-1 2.8.4 3-2.7 1.4-1.4 2.7-3-.4L12 21l-2.4-1.8-3-.2-.9-2.9-2.2-2 1-2.8-.4-3L6.8 6.9 8.2 4.2l3 .4z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><h3>여권은 늘 가방에</h3></div><p class="txt">고속철, 박물관, 쑤저우 관광지 입장에서 모두 여권을 확인해요.</p></div>
+<div class="card lilac pop" style="--i:3;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.3-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.8"/><path d="M17 14.5c2.3.2 3.9 1.9 4.5 4.5"/></svg><h3>인기 시설은 평일에</h3></div><p class="txt">사람이 몰리는 곳은 미리 예약하고 평일에 가요.</p></div>
+<div class="card butter pop" style="--i:4;"><div class="step"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5M12 17.2v.3"/></svg><h3>투어 최소 인원</h3></div><p class="txt">합류형 투어는 인원이 안 차면 취소돼요. 둘이면 2명 출발이나 프라이빗으로.</p></div>
+</div>
+</section>
+
+<section id="todo" class="alt">
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:112px; width:220px; height:220px; background:#FFE6DC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1476px; top:252px; width:72px; height:72px; background:#FFF2CC"></div>
+<div class="head pop" style="--i:0;">
+<p class="eyebrow">남은 결정</p>
+<h2>앞으로 할 일</h2>
+</div>
+<div style="display:flex; flex-direction:column; gap:28px;">
+<div class="check pop" style="--i:1;"><div kind="rounded" class="box"></div><p class="lead">항공권 예매(변경·환불 조건 확인)</p></div>
+<div class="check pop" style="--i:2;"><div kind="rounded" class="box"></div><p class="lead">12월에 무비자 입국 연장 여부 확인</p></div>
+<div class="check pop" style="--i:3;"><div kind="rounded" class="box"></div><p class="lead">숙소와 고속철 예약</p></div>
+<div class="check pop" style="--i:4;"><div kind="rounded" class="box"></div><p class="lead">그랜드 오페라하우스 1월 공연 확인</p></div>
+<div class="check pop" style="--i:5;"><div kind="rounded" class="box"></div><p class="lead">상하이박물관 동관 특별전 기간 확인</p></div>
+<div class="check pop" style="--i:6;"><div kind="rounded" class="box"></div><p class="lead">알리페이·위챗페이, eSIM 준비</p></div>
+</div>
+</section>
+
+<section id="thanks" class="alt" style="justify-content:center; align-items:center;">
+<div kind="ellipse" class="blob" style="position:absolute; left:160px; top:150px; width:260px; height:260px; background:#FFE6DC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1480px; top:600px; width:300px; height:300px; background:#DFF4EA"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:1560px; top:180px; width:120px; height:120px; background:#FFF2CC"></div>
+<div kind="ellipse" class="blob" style="position:absolute; left:300px; top:720px; width:100px; height:100px; background:#EEE6FC"></div>
+<div class="head pop" style="--i:0; align-items:center; width:1200px; gap:32px;">
+<svg class="ico" style="width:96px; height:96px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
+<h2 style="font-size:96px; text-align:center;">댓글로 골라 주세요</h2>
+<p class="lead" style="text-align:center;">슬라이드마다 댓글을 달 수 있어요. 가고 싶은 곳, 빼고 싶은 곳, 궁금한 것을 남겨 주면 일정에 반영할게요.</p>
+</div>
+</section>
+
+</div>
+<nav><button id="prev" aria-label="이전 장">&#8249;</button><span id="count"></span><button id="next" aria-label="다음 장">&#8250;</button></nav>
+<script>
+const stage = document.getElementById('stage');
+const S = Array.from(stage.children);
+let cur = 0;
+function fit() {
+  const pad = 16, navH = 64;
+  const k = Math.min((innerWidth - pad * 2) / 1920, (innerHeight - pad - navH) / 1080);
+  stage.style.transform = 'translate(' + (-960 * k) + 'px,' + (-540 * k - navH / 2 + pad / 2) + 'px) scale(' + k + ')';
+}
+function show(i) {
+  cur = Math.max(0, Math.min(S.length - 1, i));
+  S.forEach((s, j) => s.classList.toggle('on', j === cur));
+  S[cur].querySelectorAll('iframe[data-src]').forEach(f => { if (!f.src) f.src = f.dataset.src; });
+  document.getElementById('count').textContent = (cur + 1) + ' / ' + S.length;
+  document.getElementById('prev').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === S.length - 1;
+  const h = '#' + S[cur].id;
+  if (location.hash !== h) history.replaceState(null, '', h);
+}
+function fromHash() {
+  const i = S.findIndex(s => '#' + s.id === location.hash);
+  show(i < 0 ? 0 : i);
+}
+document.getElementById('prev').onclick = () => show(cur - 1);
+document.getElementById('next').onclick = () => show(cur + 1);
+addEventListener('keydown', e => {
+  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(cur + 1); }
+  if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(cur - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(S.length - 1);
+});
+let tx = null, ty = null;
+stage.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+stage.addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(cur + (dx < 0 ? 1 : -1));
+  tx = null;
+});
+addEventListener('resize', fit);
+addEventListener('hashchange', fromHash);
+fit(); fromHash();
+</script>
+</body>
+</html>
