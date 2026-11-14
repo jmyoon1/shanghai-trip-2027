@@ -53,3 +53,4 @@ body.cop #cdrawer { display: flex; }
   body.cop nav { bottom: calc(58vh + 10px); }
   #cdrawer { top: auto; left: 0; width: auto; height: 58vh; border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgba(59, 51, 85, 0.18); }
 }
+nav .plink { display: flex; align-items: center; height: 38px; padding: 0 14px; border-radius: 19px; background: #FFDCCF; color: #3B3355; text-decoration: none; font-size: 15px; }
